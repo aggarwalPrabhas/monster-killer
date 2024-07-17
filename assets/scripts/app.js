@@ -13,11 +13,16 @@ const LOG_EVENT_HEAL_PLAYER = "PLAYER_HEAL";
 const LOG_EVENT_GAME_OVER = "GAME_OVER";
 const LOG_EVENT_NEW_GAME = "NEW_GAME";
 
-const userEnteredValue = prompt("Choose max life of player and monster", "100");
-let chosenMaxLife = parseInt(userEnteredValue);
+let chosenMaxLife;
 
-if (isNaN(chosenMaxLife) || chosenMaxLife <= 0) {
+try {
+  chosenMaxLife = getMaxLifeValues();
+} catch (error) {
+  console.log(error);
   chosenMaxLife = 100;
+  alert(
+    "You have entered wrong value, default 100 value has been used instead!"
+  );
 }
 
 let currentMonsterHealth = chosenMaxLife;
@@ -25,6 +30,21 @@ let currentPlayerHealth = chosenMaxLife;
 let hasBounsLife = true;
 let battleLog = [];
 let lastLogEntry;
+
+// Get UserInput
+
+function getMaxLifeValues() {
+  const userEnteredValue = prompt(
+    "Choose max life of player and monster",
+    "100"
+  );
+  const paresedIntValue = parseInt(userEnteredValue);
+  if (isNaN(paresedIntValue) || paresedIntValue <= 0) {
+    throw { message: "Invalid user input, not a number" };
+  }
+
+  return paresedIntValue;
+}
 
 // Healthbar setter
 adjustHealthBars(chosenMaxLife);
